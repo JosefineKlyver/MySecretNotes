@@ -1,9 +1,6 @@
 import json, sqlite3, click, functools, os, hashlib,time, random, sys
 from flask import Flask, current_app, g, session, redirect, render_template, url_for, request
 
-
-
-print("Test")
 ### DATABASE FUNCTIONS ###
 
 def connect_db():
@@ -150,7 +147,7 @@ def register():
         c.execute(user_statement)
         if(len(c.fetchall())>0):
             errored = True
-            usererror = "That username is already in use by someone else!"
+            usererror = "That username is already in use by someone else test!"
 
         if(not errored):
             statement = """INSERT INTO users(id,username,password) VALUES(null,'%s','%s');""" %(username,password)
