@@ -3,7 +3,7 @@ from flask import Flask, current_app, g, session, redirect, render_template, url
 
 
 
-
+print("Test")
 ### DATABASE FUNCTIONS ###
 
 def connect_db():
