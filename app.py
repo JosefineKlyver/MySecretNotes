@@ -94,6 +94,7 @@ def notes():
     db = connect_db()
     c = db.cursor()
     statement = "SELECT * FROM notes WHERE assocUser = %s;" %session['userid']
+    statement = "SELECT * FROM notes WHERE assocUser = %s;" %session['userid']
     print(statement)
     c.execute(statement)
     notes = c.fetchall()
@@ -121,7 +122,7 @@ def login():
             session['username']=result[0][1]
             return redirect(url_for('index'))
         else:
-            error = "Wrong username or password!"
+            error = "Wrong username or password! test"
     return render_template('login.html',error=error)
 
 
@@ -139,10 +140,7 @@ def register():
         c = db.cursor()
         pass_statement = """SELECT * FROM users WHERE password = '%s';""" %password
         user_statement = """SELECT * FROM users WHERE username = '%s';""" %username
-        c.execute(pass_statement)
-        if(len(c.fetchall())>0):
-            errored = True
-            passworderror = "That password is already in use by someone else!"
+        
 
         c.execute(user_statement)
         if(len(c.fetchall())>0):
