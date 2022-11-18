@@ -70,10 +70,10 @@ def notes():
             note = request.form['noteinput']
             db = connect_db()
             c = db.cursor()
-            statement = """INSERT INTO notes(id,assocUser,dateWritten,note,publicID) VALUES(null,%s,'%s','%s',%s);""" %(session['userid'],time.strftime('%Y-%m-%d %H:%M:%S'),note,random.randrange(1000000000, 9999999999))
-            statement = "INSERT INTO notes VALUES (null, ?, ?, ?, ?)", (session['userid'], time.strftime('%Y-%m-%d %H:%M:%S'), note, random.randrange(1000000000, 9999999999))
-            print(statement)
-            c.execute(statement)
+            #statement = """INSERT INTO notes(id,assocUser,dateWritten,note,publicID) VALUES(null,%s,'%s','%s',%s);""" %(session['userid'],time.strftime('%Y-%m-%d %H:%M:%S'),note,random.randrange(1000000000, 9999999999))
+            #statement = "INSERT INTO notes VALUES (null, ?, ?, ?, ?)", (session['userid'], time.strftime('%Y-%m-%d %H:%M:%S'), note, random.randrange(1000000000, 9999999999))
+            #print(statement)
+            c.execute("INSERT INTO notes VALUES (null, ?, ?, ?, ?)", (session['userid'], time.strftime('%Y-%m-%d %H:%M:%S'), note, random.randrange(1000000000, 9999999999)))
             db.commit()
             db.close()
         elif request.form['submit_button'] == 'import note':
@@ -86,8 +86,8 @@ def notes():
             if(len(result)>0):
                 row = result[0]
                # statement = """INSERT INTO notes(id,assocUser,dateWritten,note,publicID) VALUES(null,%s,'%s','%s',%s);""" %(session['userid'],row[2],row[3],row[4])
-                statement =  "INSERT INTO notes VALUES(null,?,?,?,?)", (session['userid'],row[2],row[3],row[4])
-                c.execute(statement)
+               # statement =  "INSERT INTO notes VALUES(null,?,?,?,?)", (session['userid'],row[2],row[3],row[4])
+                c.execute("INSERT INTO notes VALUES(null,?,?,?,?)", (session['userid'],row[2],row[3],row[4]))
             else:
                 importerror="No such note with that ID!"
             db.commit()
@@ -96,9 +96,9 @@ def notes():
     db = connect_db()
     c = db.cursor()
     #statement = "SELECT * FROM notes WHERE assocUser = %s;" %session['userid']
-    statement = "SELECT * FROM notes WHERE assocUser = ?" (session['userid'], )
-    print(statement)
-    c.execute(statement)
+    #statement = "SELECT * FROM notes WHERE assocUser = ?" (session['userid'], )
+    #print(statement)
+    c.execute("SELECT * FROM notes WHERE assocUser = ?" (session['userid'], ))
     notes = c.fetchall()
     print(notes)
     
@@ -114,9 +114,8 @@ def login():
         db = connect_db()
         c = db.cursor()
         #statement = "SELECT * FROM users WHERE username = '%s' AND password = '%s';" %(username, password)
-        statement = "SELECT * FROM users WHERE username = ? AND password = ?", (username, password, )
-        
-        c.execute(statement)
+        #statement = "SELECT * FROM users WHERE username = ? AND password = ?", (username, password, )
+        c.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password, ))
         result = c.fetchall()
 
         if len(result) > 0:
@@ -144,18 +143,18 @@ def register():
         c = db.cursor()
         # pass_statement = """SELECT * FROM users WHERE password = '%s';""" %password
         #user_statement = """SELECT * FROM users WHERE username = '%s';""" %username
-        user_statement = "SELECT * FROM users WHERE username = ? ;", (username, )
+        #user_statement = "SELECT * FROM users WHERE username = ? ;", (username, )
 
-        c.execute(user_statement)
+        c.execute("SELECT * FROM users WHERE username = ?", (username, ))
         if(len(c.fetchall())>0):
             errored = True
             usererror = "That username is already in use by someone else test"
 
         if(not errored):
            # statement = """INSERT INTO users(id,username,password) VALUES(null,'%s','%s');""" %(username,password)
-            statement = "INSERT INTO users(id,username,password) VALUES(null,?,?);", (username,password, )
-            print(statement)
-            c.execute(statement)
+            #statement = "INSERT INTO users(id,username,password) VALUES(null,?,?);", (username,password, )
+            #print(statement)
+            c.execute("INSERT INTO users(id,username,password) VALUES(null,?,?);", (username,password, ))
             db.commit()
             db.close()
             return f"""<html>
