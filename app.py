@@ -113,7 +113,7 @@ def login():
         password = request.form['password']
         db = connect_db()
         c = db.cursor()
-       # statement = "SELECT * FROM users WHERE username = '%s' AND password = '%s';" %(username, password)
+        #statement = "SELECT * FROM users WHERE username = '%s' AND password = '%s';" %(username, password)
         statement = "SELECT * FROM users WHERE username = ? AND password = ?", (username, password, )
         
         c.execute(statement)
@@ -149,7 +149,7 @@ def register():
         c.execute(user_statement)
         if(len(c.fetchall())>0):
             errored = True
-            usererror = "That username is already in use by someone else test!"
+            usererror = "That username is already in use by someone else test"
 
         if(not errored):
            # statement = """INSERT INTO users(id,username,password) VALUES(null,'%s','%s');""" %(username,password)
