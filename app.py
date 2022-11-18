@@ -71,6 +71,7 @@ def notes():
             db = connect_db()
             c = db.cursor()
             statement = """INSERT INTO notes(id,assocUser,dateWritten,note,publicID) VALUES(null,%s,'%s','%s',%s);""" %(session['userid'],time.strftime('%Y-%m-%d %H:%M:%S'),note,random.randrange(1000000000, 9999999999))
+            statement = "INSERT INTO notes VALUES (null, ?, ?, ?, ?)", (session['userid'], time.strftime('%Y-%m-%d %H:%M:%S'), note, random.randrange(1000000000, 9999999999))
             print(statement)
             c.execute(statement)
             db.commit()
@@ -84,7 +85,8 @@ def notes():
             result = c.fetchall()
             if(len(result)>0):
                 row = result[0]
-                statement = """INSERT INTO notes(id,assocUser,dateWritten,note,publicID) VALUES(null,%s,'%s','%s',%s);""" %(session['userid'],row[2],row[3],row[4])
+               # statement = """INSERT INTO notes(id,assocUser,dateWritten,note,publicID) VALUES(null,%s,'%s','%s',%s);""" %(session['userid'],row[2],row[3],row[4])
+                statement =  "INSERT INTO notes VALUES(null,?,?,?,?)", (session['userid'],row[2],row[3],row[4])
                 c.execute(statement)
             else:
                 importerror="No such note with that ID!"
@@ -93,8 +95,8 @@ def notes():
     
     db = connect_db()
     c = db.cursor()
-    statement = "SELECT * FROM notes WHERE assocUser = %s;" %session['userid']
-    statement = "SELECT * FROM notes WHERE assocUser = %s;" %session['userid']
+    #statement = "SELECT * FROM notes WHERE assocUser = %s;" %session['userid']
+    statement = "SELECT * FROM notes WHERE assocUser = ?" (session['userid'], )
     print(statement)
     c.execute(statement)
     notes = c.fetchall()
@@ -111,7 +113,9 @@ def login():
         password = request.form['password']
         db = connect_db()
         c = db.cursor()
-        statement = "SELECT * FROM users WHERE username = '%s' AND password = '%s';" %(username, password)
+       # statement = "SELECT * FROM users WHERE username = '%s' AND password = '%s';" %(username, password)
+        statement = "SELECT * FROM users WHERE username = ? AND password = ?", (username, password, )
+        
         c.execute(statement)
         result = c.fetchall()
 
@@ -138,9 +142,9 @@ def register():
         password = request.form['password']
         db = connect_db()
         c = db.cursor()
-        pass_statement = """SELECT * FROM users WHERE password = '%s';""" %password
-        user_statement = """SELECT * FROM users WHERE username = '%s';""" %username
-        
+        # pass_statement = """SELECT * FROM users WHERE password = '%s';""" %password
+        #user_statement = """SELECT * FROM users WHERE username = '%s';""" %username
+        user_statement = "SELECT * FROM users WHERE username = ? ;", (username, )
 
         c.execute(user_statement)
         if(len(c.fetchall())>0):
@@ -148,7 +152,8 @@ def register():
             usererror = "That username is already in use by someone else test!"
 
         if(not errored):
-            statement = """INSERT INTO users(id,username,password) VALUES(null,'%s','%s');""" %(username,password)
+           # statement = """INSERT INTO users(id,username,password) VALUES(null,'%s','%s');""" %(username,password)
+            statement = "INSERT INTO users(id,username,password) VALUES(null,?,?);", (username,password, )
             print(statement)
             c.execute(statement)
             db.commit()
